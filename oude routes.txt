@@ -1,0 +1,61 @@
+@app.route("/genre/horror")
+@login_required
+def horror():
+    api_key = app.config['TMDB_API_KEY']
+    url = f"https://api.themoviedb.org/3/discover/movie?api_key={api_key}&with_genres=27&language=nl-NL"
+    
+    response = requests.get(url)
+    movies = response.json().get('results', [])[:8]
+
+    reserved_ids = [m.tmdb_id for m in Movie.query.filter_by(is_reserved=True).all()]
+    my_reserved_ids = [m.tmdb_id for m in Movie.query.filter_by(is_reserved=True, reserved_by=current_user.id).all()]
+
+    return render_template('horror.html', movies=movies, reserved_ids=reserved_ids, my_reserved_ids=my_reserved_ids)
+
+@app.route("/genre/comedy")
+@login_required
+def comedy():
+    api_key = app.config['TMDB_API_KEY']
+    url = f"https://api.themoviedb.org/3/discover/movie?api_key={api_key}&with_genres=35&language=nl-NL"
+    
+    response = requests.get(url)
+    movies = response.json().get('results', [])[:8]
+
+    reserved_ids = [m.tmdb_id for m in Movie.query.filter_by(is_reserved=True).all()]
+    my_reserved_ids = [m.tmdb_id for m in Movie.query.filter_by(is_reserved=True, reserved_by=current_user.id).all()]
+
+    return render_template('comedy.html', movies=movies, reserved_ids=reserved_ids, my_reserved_ids=my_reserved_ids)
+
+@app.route("/genre/drama")
+@login_required
+def drama():
+    api_key = app.config['TMDB_API_KEY']
+    url = f"https://api.themoviedb.org/3/discover/movie?api_key={api_key}&with_genres=18&language=nl-NL"
+    
+    response = requests.get(url)
+    data = response.json()
+    movies = data.get('results', [])[:8]
+
+    # alle gereserveerde ID's (om te weten welke knoppen grijs/bezet moeten zijn)
+    reserved_movies = Movie.query.filter_by(is_reserved=True).all()
+    reserved_ids = [m.tmdb_id for m in reserved_movies]
+
+    my_reserved_movies = Movie.query.filter_by(is_reserved=True, reserved_by=current_user.id).all()
+    my_reserved_ids = [m.tmdb_id for m in my_reserved_movies]
+
+    return render_template('drama.html', 
+                           movies=movies, 
+                           reserved_ids=reserved_ids, 
+                           my_reserved_ids=my_reserved_ids)
+
+@app.route("/genre/actie")
+@login_required
+def actie():
+    api_key = app.config['TMDB_API_KEY']
+    url = f"https://api.themoviedb.org/3/discover/movie?api_key={api_key}&with_genres=28&language=nl-NL"
+    movies = requests.get(url).json().get('results', [])[:8]
+
+    reserved_ids = [m.tmdb_id for m in Movie.query.filter_by(is_reserved=True).all()]
+    my_reserved_ids = [m.tmdb_id for m in Movie.query.filter_by(is_reserved=True, reserved_by=current_user.id).all()]
+
+    return render_template('actie.html', movies=movies, reserved_ids=reserved_ids, my_reserved_ids=my_reserved_ids)

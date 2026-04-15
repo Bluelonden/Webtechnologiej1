@@ -33,3 +33,10 @@ class User(db.Model, UserMixin):
     def check_password(self, password: str) -> bool:
         """Controleert of een ingevoerd wachtwoord overeenkomt met de opgeslagen hash."""
         return check_password_hash(self.password_hash, password)
+
+class Movie(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    tmdb_id = db.Column(db.Integer, unique=True, nullable=False)
+    title = db.Column(db.String(200), nullable=False)
+    is_reserved = db.Column(db.Boolean, default=False)
+    reserved_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)

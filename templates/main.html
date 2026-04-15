@@ -1,7 +1,71 @@
 {% extends "base.html" %}
+
 {% block content %}
+<style>
+    .hero-section {
+        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)), 
+                    url('https://images.unsplash.com/photo-1478720568477-152d9b164e26?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+        background-size: cover;
+        background-position: center;
+        padding: 100px 20px;
+        border-radius: 20px;
+        text-align: center;
+        margin-bottom: 40px;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
 
+    .glass-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 25px;
+        transition: 0.3s;
+    }
 
+    .glass-card:hover {
+        transform: translateY(-10px);
+        background: rgba(255, 255, 255, 0.1);
+    }
+</style>
 
-    {% endblock %}
+<div class="hero-section">
+    <h1 class="display-3 fw-bold">Jouw persoonlijke bioscoop.</h1>
+    <p class="lead text-light">Blader door de grootste database, aangedreven door TMDB, en reserveer je favoriete films.</p>
+    <hr class="my-4 bg-secondary">
+    
+    {% if not current_user.is_authenticated %}
+        <p>Log in om toegang te krijgen tot de genres en reserveringen.</p>
+        <a class="btn btn-danger btn-lg px-5 py-3 fw-bold" href="/register" role="button">Maak een account</a>
+    {% else %}
+        <p>Kies een genre in het menu om te beginnen met kijken.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="/genre/actie" class="btn btn-outline-light">Actie</a>
+            <a href="/genre/comedy" class="btn btn-outline-light">Comedy</a>
+            <a href="/genre/drama" class="btn btn-outline-light">Drama</a>
+            <a href="/genre/horror" class="btn btn-outline-light">Horror</a>
+        </div>
+    {% endif %}
+</div>
 
+<div class="row g-4 text-center">
+    <div class="col-md-4">
+        <div class="glass-card">
+            <h3>🚀 Live Data</h3>
+            <p class="text-secondary">Altijd de nieuwste films direct opgehaald via de TMDB API.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="glass-card">
+            <h3>🔒 Veilig</h3>
+            <p class="text-secondary">Je eigen profiel met beveiligde wachtwoord-encryptie.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="glass-card">
+            <h3>🎟️ Reserveren</h3>
+            <p class="text-secondary">Klik op een film en reserveer hem direct voor je collectie.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
