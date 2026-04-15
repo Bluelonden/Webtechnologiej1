@@ -36,24 +36,16 @@
             border-color: #444;
         }
 
-        body.light-mode h1,
-        body.light-mode h2,
-        body.light-mode h3,
-        body.light-mode h4,
-        body.light-mode h5,
-        body.light-mode p,
+        body.light-mode h1, body.light-mode h2, body.light-mode h3,
+        body.light-mode h4, body.light-mode h5, body.light-mode p,
         body.light-mode .nav-link:not(.btn),
         body.light-mode .navbar-brand,
         body.light-mode .text-info {
             color: #212529 !important;
         }
 
-        body.dark-mode h1,
-        body.dark-mode h2,
-        body.dark-mode h3,
-        body.dark-mode h4,
-        body.dark-mode h5,
-        body.dark-mode p,
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3,
+        body.dark-mode h4, body.dark-mode h5, body.dark-mode p,
         body.dark-mode .nav-link:not(.btn),
         body.dark-mode .navbar-brand,
         body.dark-mode .text-info {
@@ -80,24 +72,13 @@
             margin-bottom: 0;
         }
 
-        #toggle {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
+        #toggle { opacity: 0; width: 0; height: 0; }
 
-        #container,
-        #button,
-        #sun,
-        #moon,
-        #cloud,
-        #stars {
+        #container, #button, #sun, #moon, #cloud, #stars {
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        #container {
-            fill: #5ebad9;
-        }
+        #container { fill: #5ebad9; }
 
         #toggle:checked+svg #container {
             fill: #3a4b63;
@@ -105,46 +86,17 @@
             stroke-width: 0.5px;
         }
 
-        #toggle:checked+svg #button {
-            transform: translate(28px, 2.333px);
-        }
+        #toggle:checked+svg #button { transform: translate(28px, 2.333px); }
+        #sun { opacity: 1; }
+        #toggle:checked+svg #sun { opacity: 0; }
+        #moon { opacity: 0; }
+        #toggle:checked+svg #moon { opacity: 1; }
+        #cloud { opacity: 1; }
+        #toggle:checked+svg #cloud { opacity: 0; }
+        #stars { opacity: 0; }
+        #toggle:checked+svg #stars { opacity: 1; }
 
-        #sun {
-            opacity: 1;
-        }
-
-        #toggle:checked+svg #sun {
-            opacity: 0;
-        }
-
-        #moon {
-            opacity: 0;
-        }
-
-        #toggle:checked+svg #moon {
-            opacity: 1;
-        }
-
-        #cloud {
-            opacity: 1;
-        }
-
-        #toggle:checked+svg #cloud {
-            opacity: 0;
-        }
-
-        #stars {
-            opacity: 0;
-        }
-
-        #toggle:checked+svg #stars {
-            opacity: 1;
-        }
-
-        svg {
-            width: 100%;
-            height: auto;
-        }
+        svg { width: 100%; height: auto; }
     </style>
     {% block styles %}{% endblock %}
 </head>
@@ -170,6 +122,11 @@
                             <li><a class="dropdown-item" href="/genre/horror">Horror</a></li>
                         </ul>
                     </li>
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/mijn_reserveringen">Mijn Lijst</a>
+                    </li>
+                    {% endif %}
                 </ul>
 
                 <div class="theme-switch-wrapper">
@@ -227,6 +184,19 @@
         </div>
     </nav>
 
+    <div class="container mt-3">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
     <div class="container mt-4">
         {% block content %}{% endblock %}
     </div>
@@ -256,5 +226,4 @@
         });
     </script>
 </body>
-
 </html>

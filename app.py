@@ -109,7 +109,7 @@ def toon_genre(genre_naam):
     genre_id = genre_ids.get(genre_naam.lower())
     if not genre_id:
         return "Genre niet gevonden", 404
-
+    
     # TMDB Request
     url = f"https://api.themoviedb.org/3/discover/movie?api_key={api_key}&with_genres={genre_id}&language=nl-NL"
     movies = requests.get(url).json().get('results', [])[:8]
@@ -124,6 +124,13 @@ def toon_genre(genre_naam):
                            reserved_ids=reserved_ids, 
                            my_reserved_ids=my_reserved_ids)
 
+@app.route("/mijn_reserveringen")
+@login_required
+def mijn_reserveringen():
+    # Haal alle films op die door de huidige gebruiker zijn gereserveerd
+    reserveringen = Movie.query.filter_by(is_reserved=True, reserved_by=current_user.id).all()
+    return render_template('mijn_reserveringen.html', reserveringen=reserveringen)
+
 @app.route("/film/<int:movie_id>")
 def film_detail(movie_id):
     api_key = app.config['TMDB_API_KEY']
@@ -131,15 +138,18 @@ def film_detail(movie_id):
     # haal film details op
     movie = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={api_key}&language=nl-NL").json()
     
-    # haal Watch Providers op (Streaming diensten)
-    providers_data = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}/watch/providers?api_key={api_key}").json()
+    # haal Watch Providers op
+    providers_url = f"https://api.themoviedb.org/3/movie/{movie_id}/watch/providers?api_key={api_key}"
+    providers_data = requests.get(providers_url).json()
     
-    # pak de Nederlandse resultaten
+    # Pak de Nederlandse resultaten
     results_nl = providers_data.get('results', {}).get('NL', {})
     
-    # 'flatrate' zijn abonnementen (Netflix, Disney+), 'buy' is koop (Pathé Thuis)
     streaming = results_nl.get('flatrate', [])
     koop = results_nl.get('buy', [])
+
+    # DEBUG: Check je terminal om te zien of er iets gevonden is
+    print(f"DEBUG: Providers gevonden voor {movie.get('title')}: {len(streaming)} streaming, {len(koop)} koop")
     
     return render_template('film_detail.html', movie=movie, streaming=streaming, koop=koop)
 
