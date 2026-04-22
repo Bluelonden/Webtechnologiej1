@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}Drama Collectie - Hanzeflix{% endblock %}
+
+{% block styles %}
+<style>
+    /* CSS credits to Uiverse & Codepen */
+    :root {
+        --drama-accent: #6c5ce7;
+    }
+
+    body {
+        background-color: #0c0c14;
+    }
+
+    .drama-header {
+        border-left: 5px solid var(--drama-accent);
+        padding-left: 15px;
+        margin-bottom: 40px;
+    }
+
+    .movie-card-uiverse {
+        position: relative;
+        width: 100%;
+        height: 450px;
+        background-color: #151515;
+        border-radius: 20px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .movie-card-uiverse img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .movie-card-uiverse .content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        padding: 25px;
+        box-sizing: border-box;
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(0px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        opacity: 0;
+        transform: translateY(50px);
+        transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .movie-card-uiverse:hover {
+        transform: rotateY(5deg) scale(1.02);
+        box-shadow: 0 15px 40px rgba(108, 92, 231, 0.3);
+    }
+
+    .movie-card-uiverse:hover img {
+        transform: scale(1.1);
+        filter: blur(2px);
+    }
+
+    .movie-card-uiverse:hover .content {
+        opacity: 1;
+        transform: translateY(0);
+        backdrop-filter: blur(12px);
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .movie-card-uiverse .content h5 {
+        font-weight: 800;
+        letter-spacing: 1px;
+        color: white;
+    }
+
+    .movie-card-uiverse .content p {
+        font-size: 0.85rem;
+        color: #d1d1d1;
+        line-height: 1.5;
+        margin: 15px 0;
+    }
+
+    .reserve-btn {
+        background-color: var(--drama-accent);
+        border: none;
+        color: white;
+        font-weight: bold;
+        padding: 10px 25px;
+        border-radius: 50px;
+        transition: 0.3s ease;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+    }
+
+    .reserve-btn:hover {
+        background-color: white;
+        color: var(--drama-accent);
+        transform: scale(1.1);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="drama-header">
+        <h1 class="display-4 fw-bold text-white">Drama Meesterwerken</h1>
+        <p class="text-secondary">Verhalen die raken en inspireren.</p>
+    </div>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
+        {% for movie in movies %}
+        <div class="col">
+            <div class="movie-card-uiverse">
+                {% if movie.poster_path %}
+                <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" alt="{{ movie.title }}">
+                {% else %}
+                <img src="https://via.placeholder.com/500x750?text=Geen+Poster" alt="No image">
+                {% endif %}
+
+                <div class="content">
+                    <h5>{{ movie.title }}</h5>
+                    <p class="text-info small">⭐ {{ movie.vote_average }} | {{ movie.release_date[:4] }}</p>
+                    <p>{{ movie.overview[:160] }}...</p>
+                    {# check eerst of de film door JOU gereserveerd is #}
+                    {% if movie.id in my_reserved_ids %}
+                    <a href="{{ url_for('annuleer_reservering', tmdb_id=movie.id) }}"
+                        class="btn btn-warning w-100 rounded-pill"
+                        style="font-size: 0.7rem; color: #000; font-weight: bold;">
+                        ✖ Annuleer mijn reservering
+                    </a>
+
+                    {# check dan of de film door IEMAND ANDERS gereserveerd is #}
+                    {% elif movie.id in reserved_ids %}
+                    <button class="btn btn-secondary disabled w-100 rounded-pill" style="font-size: 0.7rem;">
+                        🚫 Reeds Gereserveerd
+                    </button>
+
+                    {# ls hij helemaal niet gereserveerd is, toon de reserveerknop #}
+                    {% else %}
+                    <a href="{{ url_for('reserveer', tmdb_id=movie.id, title=movie.title) }}"
+                        class="btn reserve-btn w-100">
+                        Reserveer
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            <p class="mt-3 text-center text-truncate small text-secondary fw-bold">{{ movie.title }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

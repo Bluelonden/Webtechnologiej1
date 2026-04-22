@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Mijn Reserveringen{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Mijn Gereserveerde Films</h2>
+    <hr>
+    {% if reserveringen %}
+        <div class="row">
+            {% for film in reserveringen %}
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ film.title }}</h5>
+                        <p class="card-text text-muted">TMDB ID: {{ film.tmdb_id }}</p>
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('film_detail', movie_id=film.tmdb_id) }}" class="btn btn-sm btn-primary">Details</a>
+                            <a href="{{ url_for('annuleer_reservering', tmdb_id=film.tmdb_id) }}" class="btn btn-sm btn-outline-danger">Annuleren</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted">Je hebt nog geen films gereserveerd.</p>
+        <a href="/" class="btn btn-primary">Zoek een leuke film</a>
+    {% endif %}
+</div>
+{% endblock %}
