@@ -1,0 +1,37 @@
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h4 class="text-white">Beschikbaar op:</h4>
+        
+        {% if streaming %}
+            <p class="text-secondary mb-2">Streaming (Abonnement):</p>
+            <div class="d-flex gap-3 mb-4">
+                {% for provider in streaming %}
+                    <div class="text-center">
+                        <img src="https://image.tmdb.org/t/p/original{{ provider.logo_path }}" 
+                             alt="{{ provider.provider_name }}" 
+                             style="width: 50px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
+                        <p class="small text-muted mt-1">{{ provider.provider_name }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if koop %}
+            <p class="text-secondary mb-2">Huren of Kopen:</p>
+            <div class="d-flex gap-3">
+                {% for provider in koop %}
+                    <div class="text-center">
+                        <img src="https://image.tmdb.org/t/p/original{{ provider.logo_path }}" 
+                             alt="{{ provider.provider_name }}" 
+                             style="width: 50px; border-radius: 12px;">
+                        <p class="small text-muted mt-1">{{ provider.provider_name }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if not streaming and not koop %}
+            <p class="text-warning">Helaas, deze film staat momenteel niet op de bekende streamingdiensten in Nederland.</p>
+        {% endif %}
+    </div>
+</div>

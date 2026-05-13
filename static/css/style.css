@@ -1,0 +1,212 @@
+/* --- ALGEMENE STYLING --- */
+:root {
+    --actie-accent: #ffa502;
+    --comedy-accent: #2ed573;
+    --drama-accent: #6c5ce7;
+    --horror-accent: #ff4757;
+}
+
+body {
+    background-color: #0c0c14 !important;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* --- HOME / HERO SECTIE --- */
+.hero-section {
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), 
+                url('https://images.unsplash.com/photo-1478720568477-152d9b164e26?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+    background-size: cover;
+    background-position: center;
+    padding: 100px 20px;
+    border-radius: 20px;
+    text-align: center;
+    margin-bottom: 40px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 25px;
+    transition: 0.3s;
+}
+
+.glass-card:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* --- GENRE HEADERS --- */
+.genre-header, .drama-header {
+    padding-left: 15px;
+    margin-bottom: 40px;
+    color: white; /* Standaard wit voor dark mode */
+}
+.genre-header[data-genre="actie"] { border-left: 5px solid var(--actie-accent); }
+.genre-header[data-genre="comedy"] { border-left: 5px solid var(--comedy-accent); }
+.genre-header[data-genre="horror"] { border-left: 5px solid var(--horror-accent); }
+.drama-header { border-left: 5px solid var(--drama-accent); }
+
+/* --- MOVIE CARDS (UIVERSE) --- */
+.movie-card-uiverse {
+    position: relative;
+    width: 100%;
+    height: 450px;
+    background-color: #151515;
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.movie-card-uiverse img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: 0.6s;
+}
+
+.movie-card-uiverse .content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 25px;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+}
+
+.movie-card-uiverse:hover .content {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- BUTTONS --- */
+.reserve-btn {
+    border: none;
+    border-radius: 50px;
+    padding: 10px 25px;
+    font-weight: bold;
+    transition: 0.3s;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+
+.btn-actie { background-color: var(--actie-accent); color: black; }
+.btn-comedy { background-color: var(--comedy-accent); color: black; }
+.btn-drama { background-color: var(--drama-accent); color: white; }
+.btn-horror { background-color: var(--horror-accent); color: white; }
+
+/* =========================================
+   LIGHT MODE STYLES
+   ========================================= */
+
+body.light-mode {
+    background-color: #f8f9fa !important;
+    color: #212529 !important;
+}
+
+body.light-mode .navbar {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #dee2e6 !important;
+}
+
+body.light-mode .navbar-brand, 
+body.light-mode .nav-link {
+    color: #212529 !important;
+}
+
+/* Dwing alle titels met 'text-white' class naar donker in light mode */
+body.light-mode .text-white,
+body.light-mode h1.text-white,
+body.light-mode h2.text-white,
+body.light-mode .display-4.text-white {
+    color: #212529 !important;
+}
+
+/* UITZONDERING: De tekst binnen de filmkaarten (hover) moet wit blijven voor contrast */
+body.light-mode .movie-card-uiverse .content .text-white,
+body.light-mode .movie-card-uiverse .content h5,
+body.light-mode .movie-card-uiverse .content h4,
+body.light-mode .movie-card-uiverse .content p {
+    color: #ffffff !important;
+}
+
+/* Genre Headers op eigen pagina's */
+body.light-mode .genre-header,
+body.light-mode .drama-header {
+    color: #212529 !important;
+}
+
+/* De Hero Section (Projector foto) */
+body.light-mode .hero-section {
+    background: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.85)), 
+                url('https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&w=1350&q=80') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    border: 1px solid rgba(0,0,0,0.1) !important;
+}
+
+/* Tekst in Hero zwart maken */
+body.light-mode .hero-section h1,
+body.light-mode .hero-section p,
+body.light-mode .hero-section .lead {
+    color: #212529 !important;
+}
+
+body.light-mode .hero-section hr {
+    background-color: #212529 !important;
+    opacity: 0.2;
+}
+
+/* Knoppen op de homepagina naar donker */
+body.light-mode .hero-section .btn-outline-light {
+    color: #212529 !important;
+    border-color: #212529 !important;
+}
+
+body.light-mode .hero-section .btn-outline-light:hover {
+    background-color: #212529 !important;
+    color: #ffffff !important;
+}
+
+/* Film titels onder de kaartjes in de grid */
+body.light-mode .text-secondary.fw-bold {
+    color: #212529 !important;
+}
+
+/* Kaarten onderaan de homepagina */
+body.light-mode .glass-card {
+    background: #ffffff !important;
+    border: 1px solid #dee2e6 !important;
+    color: #212529 !important;
+}
+
+body.light-mode .glass-card p {
+    color: #6c757d !important;
+}
+
+/* Dropdown menu kleuren */
+body.light-mode .dropdown-menu {
+    background-color: #ffffff !important;
+    border: 1px solid #dee2e6 !important;
+}
+
+body.light-mode .dropdown-item {
+    color: #212529 !important;
+}
